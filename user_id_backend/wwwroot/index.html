@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PPT Tech Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+
+<body class="d-flex h-100 text-center text-bg-dark">
+
+    <div class="d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header class="mb-auto">
+            <div>
+                <h3 class="float-md-start mb-0">Pacific Programming and Tech</h3>
+            </div>
+        </header>
+
+        <main class="px-3">
+            <h1>Technical Test.</h1>
+            <p>Change the user identifier to get their profile image</p>
+            <div class="d-flex justify-content-center pb-3">
+                <input type="text" class="form-control w-auto mx-2" id="userIdentifierInput" placeholder="User identifier">
+                <button type="submit" class="btn btn-sm fw-bold border-white bg-white text-black mx-2">Get profile image</button>
+            </div>
+            <div>
+                <img src="https://api.dicebear.com/8.x/pixel-art/png?size=150" id="userAvatarImage" class="rounded border border-4 border-secondary" />
+            </div>
+        </main>
+
+        <footer class="mt-auto text-white-50">
+            <p>Send completed submissions to backend-tech-test@dblexchange.com</p>
+        </footer>
+    </div>
+
+    <script type="text/javascript">
+        var input = document.getElementById('userIdentifierInput');
+        input.addEventListener('keypress', onKeypress);
+        document.querySelector('button').addEventListener('click', onButtonClick);
+
+        async function onButtonClick(e) {
+            // 📃 To do: Get avatar URI from back end
+            //
+            await getAvatar();        
+            //const avatarUrl = 'https://api.dicebear.com/8.x/pixel-art/png?seed=default&size=150';                
+        }
+        async function onKeypress(e) {
+            if (e.key == 'Enter') {
+                await getAvatar();
+            }
+        }
+
+        async function getAvatar() {
+            const userIdentifier = input.value;
+            if (userIdentifier) { 
+                const response = await fetch(`/avatar?user_identifier=${userIdentifier}`);
+                const responseBody = await response.json();
+                if (responseBody.url) {
+                    const avatarUrl = responseBody.url;
+                    document.getElementById('userAvatarImage').src = avatarUrl;
+                } else {
+                    alert(responseBody.value);
+                }
+            }
+            
+        }
+    </script>
+</body>
+</html>
